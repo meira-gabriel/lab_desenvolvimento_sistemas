@@ -1,0 +1,67 @@
+{
+  "produtos": [
+    {
+      "nome": "Da casa",
+      "descricao": "Arroz e bife acebolado",
+      "preco": "R$ 30",
+      "imagem": "produto1.jpg",
+      "id": 1
+    },
+    {
+      "id": 2,
+      "nome": "Italiana",
+      "descricao": "Pizza de muçarela com tomate cereja",
+      "preco": "R$ 50",
+      "imagem": "produto2.jpg"
+    },
+    {
+      "id": 3,
+      "nome": "Marítimo",
+      "descricao": "Filé de peixe acompanhado de salada",
+      "preco": "R$ 35",
+      "imagem": "produto3.jpg"
+    },
+    {
+      "id": 4,
+      "nome": "Cheddar",
+      "descricao": "Hambúrguer com cheddar e salada",
+      "preco": "R$ 30",
+      "imagem": "produto4.jpg"
+    },
+    {
+      "id": 5,
+      "nome": "Feijoada",
+      "descricao": "Feijoada com arroz, couve e torresmo",
+      "preco": "R$ 45",
+      "imagem": "produto5.jpg"
+    },
+    {
+      "id": 6,
+      "nome": "Bolonhesa",
+      "descricao": "Macarrão ao molho bolonhesa",
+      "preco": "R$ 25",
+      "imagem": "produto6.jpg"
+    },
+    {
+      "id": 7,
+      "nome": "Bolonhesa",
+      "descricao": "Macarrão ao molho bolonhesa",
+      "preco": "R$ 25",
+      "imagem": "produto6.jpg"
+    },
+    {
+      "id": 8,
+      "nome": "Bolonhesa",
+      "descricao": "Macarrão ao molho bolonhesa",
+      "preco": "R$ 25",
+      "imagem": "produto6.jpg"
+    },
+    {
+      "id": 9,
+      "nome": "Bolonhesa",
+      "descricao": "Macarrão ao molho bolonhesa",
+      "preco": "R$ 25",
+      "imagem": "produto6.jpg"
+    }
+  ]
+}

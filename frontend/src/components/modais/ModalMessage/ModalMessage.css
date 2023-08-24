@@ -1,0 +1,63 @@
+
+.modal-content {
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.modal-body {
+    text-align: center;
+}
+
+.modalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.titleHeader {
+    max-width: 500px;
+}
+
+.modalHeader h4, 
+.modalBody p {
+    color: black;
+}
+
+.iconError,
+.iconSuccess {
+    margin-top: -10px;
+    margin-right: 10px;
+}
+
+.buttonCloseModal {
+    text-align: center;
+}
+
+.listaErros {
+    font-size: 20px;
+    font-size: 10;
+    list-style: none;
+    text-align: left;
+    list-style-position: inside;
+}
+
+.modal .buttonCloseModal button {
+    background-color:#000000;
+    border: none;
+    margin: 3px;
+}
+
+.modal .buttonCloseModal .buttonOpcional button {
+    background-color:#696969;
+    border: none;
+    margin: 3px;
+}
+
+.modal .buttonCloseModal button:hover{
+    background-color: #687f85ce;
+}
+
+.modal .buttonCloseModal button:active {
+    background-color: #44727c9d;
+}
