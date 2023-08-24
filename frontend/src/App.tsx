@@ -1,23 +1,18 @@
-import './App.css';
+import Header from 'components/header'
+import './styles/global.css'
+import Products from 'components/products'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import { ProductsContextProvider } from 'contexts/ProductsContext'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <ProductsContextProvider>
+        <Products />
+      </ProductsContextProvider>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
