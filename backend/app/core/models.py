@@ -15,6 +15,9 @@ class Usuario(models.Model):
     nome = models.CharField(max_length=100)
     cd_cpf_cnpj = models.CharField(max_length=14) # codigo de cpf ou cnpj
 
+    def __str__(self):
+        return f"{self.nome} - {self.cd_cpf_cnpj}"
+
 
 class Endereco(models.Model):
     nm_logradouro = models.CharField(max_length=100)
@@ -75,15 +78,6 @@ class Pedido(models.Model):
             UniqueConstraint(fields=['id_compra'], name='unique_pedido_compra')
         ]
 
-
-
-# class Product(models.Model):
-#     name = models.CharField(max_length=100)
-#     description = models.TextField()
-#     price = models.DecimalField(max_digits=10, decimal_places=2)
-#
-#     def __str__(self):
-#         return self.name
 
 
 

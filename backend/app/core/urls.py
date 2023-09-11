@@ -1,15 +1,7 @@
-from django.urls import path, include
-from . import views
-# from rest_framework import routers
-#
-# # router = routers.DefaultRouter()
-# # router.register('products', views.ProductsView)
-# #
-# # urlpatterns = [
-# #     path('', include(router.urls)),
-# #
-# # ]
-#
-urlpatterns = [
+from django.urls import path
+from .views import InfoUsuario, TipoUsuarioInfo
 
+urlpatterns = [
+    path('usuario/<int:id>', TipoUsuarioInfo.as_view()),
+    path('usuario/', InfoUsuario.as_view()),
 ]

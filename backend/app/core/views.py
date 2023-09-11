@@ -1,10 +1,92 @@
-from django.shortcuts import render
-from rest_framework import viewsets
-# from .models import Product
-# from .serializers import ProductSerializer
-#
-# class ProductsView(viewsets.ModelViewSet):
-#     queryset = Product.objects.all().order_by('name')
-#     serializer_class = ProductSerializer
-#
+from rest_framework.response import Response
 
+from rest_framework.views import APIView
+
+from rest_framework import status
+from .models import TipoUsuario, Usuario, Endereco, Estabelecimento, Produto, Cartao, Carrinho, Compra
+from .serializers import (
+    TipoUsuarioSerializer, UsuarioSerializer,
+    EnderecoSerializer, EstabelecimentoSerializer,
+    ProdutoSerializer, CartaoSerializer,
+    CarrinhoSerializer, CompraSerializer
+)
+
+class TipoUsuarioInfo(APIView):
+    def get(self, request):
+        obj = TipoUsuario.objects.all()
+        serializer = TipoUsuarioSerializer(obj, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = TipoUsuarioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+
+class InfoUsuario(APIView):
+    def get(self, request):
+        obj = Usuario.objects.all()
+        serializer = UsuarioSerializer(obj, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = UsuarioSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+
+class UsuarioId(APIView):
+    def get(self, request, id):
+        try:
+            obj = Usuario.objects.get(id=id)
+
+        except Usuario.DoesNotExist:
+            msg = {"msg": "Usuario não encontrado"}
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UsuarioSerializer(obj)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, id):
+        try:
+            obj = Usuario.objects.get(id=id)
+
+        except Usuario.DoesNotExist:
+            msg = {"msg": "Usuario não encontrado"}
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UsuarioSerializer(obj, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_205_RESET_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, id):
+        try:
+            obj = Usuario.objects.get(id=id)
+
+        except Usuario.DoesNotExist:
+            msg = {"msg": "Usuario não encontrado"}
+            return Response(status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UsuarioSerializer(obj, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_205_RESET_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, id):
+        try:
+            obj = Usuario.objects.get(id=id)
+
+        except Usuario.DoesNotExist:
+            msg = {"msg": "Usuario não encontrado"}
+            return Response(msg, status=status.HTTP_404_NOT_FOUND)
+
+        obj.delete()
+        return Response({"msg":"deletado"}, status=status.HTTP_204_NO_CONTENT)
