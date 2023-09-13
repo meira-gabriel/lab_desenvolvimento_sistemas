@@ -1,18 +1,33 @@
-import Header from 'components/header'
-import './styles/global.css'
-import Products from 'components/products'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { ProductsContextProvider } from 'contexts/ProductsContext'
+import { BrowserRouter } from 'react-router-dom'
 
-function App() {
+import { AppRoutes } from './routes'
+
+import { Theme } from './styles/Theme'
+import { GlobalStyle } from './styles/global'
+import { Normalize } from 'styled-normalize'
+import { ProductsProvider } from './contexts/productsContext'
+import { CartProvider } from './contexts/CartContext'
+
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { AccountProvider } from './contexts/accountContext'
+
+export default function App() {
+
   return (
-    <div className="App">
-      <Header />
-      <ProductsContextProvider>
-        <Products />
-      </ProductsContextProvider>
-    </div>
+    <BrowserRouter>
+      <Theme>
+        <AccountProvider>
+          <ProductsProvider>
+            <CartProvider>
+              <AppRoutes />
+              <ToastContainer autoClose={2000} position="bottom-center" />
+              <GlobalStyle />
+              <Normalize />
+            </CartProvider>
+          </ProductsProvider>
+        </AccountProvider>
+      </Theme>
+    </BrowserRouter>
   )
 }
-
-export default App

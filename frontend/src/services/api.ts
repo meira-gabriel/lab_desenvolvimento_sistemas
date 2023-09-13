@@ -1,9 +1,7 @@
-/* eslint-disable */
 import axios from 'axios'
-/* eslint-enable */
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001'
+  baseURL: process.env.REACT_APP_API_BASE_URL,
 })
 
 export default api
