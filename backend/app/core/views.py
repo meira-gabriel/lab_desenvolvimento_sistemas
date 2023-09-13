@@ -12,7 +12,7 @@ from .serializers import (
 )
 
 class TipoUsuarioInfo(APIView):
-    def get(self, request):
+    def get(self, request, id):
         obj = TipoUsuario.objects.all()
         serializer = TipoUsuarioSerializer(obj, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -25,10 +25,18 @@ class TipoUsuarioInfo(APIView):
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
 
-class InfoUsuario(APIView):
-    def get(self, request):
-        obj = Usuario.objects.all()
-        serializer = UsuarioSerializer(obj, many=True)
+class UsuarioAPI(APIView):
+    def get(self, request, id=None):
+        try:
+            if id is None:
+                obj = Usuario.objects.all()
+            else:
+                obj = Usuario.objects.get(pk=id)
+
+        except Usuario.DoesNotExist:
+            msg = {"msg": "Usuario não encontrado"}
+            return Response(status=status.HTTP_404_NOT_FOUND,message=msg)
+        serializer = UsuarioSerializer(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
@@ -36,19 +44,14 @@ class InfoUsuario(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class UsuarioId(APIView):
-    def get(self, request, id):
-        try:
-            obj = Usuario.objects.get(id=id)
-
-        except Usuario.DoesNotExist:
-            msg = {"msg": "Usuario não encontrado"}
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-        serializer = UsuarioSerializer(obj)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    # def post(self, request):
+    #     serializer = UsuarioSerializer(data=request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    #     return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
         try:

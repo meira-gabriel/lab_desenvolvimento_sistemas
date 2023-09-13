@@ -7,21 +7,10 @@ class TipoUsuarioSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    tp_usuario_name = serializers.CharField()
-
     class Meta:
         model = Usuario
         fields = '__all__'
-        extra_kwargs = {
-            'tp_usuario': {'read_only': True},  # Configurar tp_usuario como somente leitura
-        }
 
-    def create(self, validated_data):
-        tp_usuario_name = validated_data.pop('tp_usuario_name', None)
-        if tp_usuario_name:
-            tp_usuario, created = TipoUsuario.objects.get_or_create(nm=tp_usuario_name)
-            validated_data['tp_usuario'] = tp_usuario
-        return super().create(validated_data)
 
 class EnderecoSerializer(serializers.ModelSerializer):
     class Meta:
