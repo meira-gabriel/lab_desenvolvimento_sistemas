@@ -15,10 +15,6 @@ class Usuario(models.Model):
     nome = models.CharField(max_length=100)
     cd_cpf_cnpj = models.CharField(max_length=14) # codigo de cpf ou cnpj
 
-    def __str__(self):
-        return f"{self.nome} - {self.cd_cpf_cnpj}"
-
-
 class Endereco(models.Model):
     nm_logradouro = models.CharField(max_length=100)
     nr_logradouro = models.IntegerField()

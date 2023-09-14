@@ -27,15 +27,20 @@ class TipoUsuarioInfo(APIView):
 
 class UsuarioAPI(APIView):
     def get(self, request, id=None):
-        try:
-            if id is None:
-                obj = Usuario.objects.all()
-            else:
+        if id is None:
+            # Se id não for fornecido, listamos todos os usuários
+            queryset = Usuario.objects.all()
+            serializer = UsuarioSerializer(queryset, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            # Se id for fornecido, obtemos um único usuário
+            try:
                 obj = Usuario.objects.get(pk=id)
-
-        except Usuario.DoesNotExist:
-            msg = {"msg": "Usuario não encontrado"}
-            return Response(status=status.HTTP_404_NOT_FOUND,message=msg)
+                serializer = UsuarioSerializer(obj)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except Usuario.DoesNotExist:
+                msg = {"msg": "Usuario não encontrado"}
+                return Response(status=status.HTTP_404_NOT_FOUND, data=msg)
         serializer = UsuarioSerializer(obj)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -45,13 +50,6 @@ class UsuarioAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    # def post(self, request):
-    #     serializer = UsuarioSerializer(data=request.data)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    #     return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, id):
         try:
@@ -67,21 +65,6 @@ class UsuarioAPI(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_205_RESET_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    #
-    # def patch(self, request, id):
-    #     try:
-    #         obj = Usuario.objects.get(id=id)
-    #
-    #     except Usuario.DoesNotExist:
-    #         msg = {"msg": "Usuario não encontrado"}
-    #         return Response(status=status.HTTP_404_NOT_FOUND)
-    #
-    #     serializer = UsuarioSerializer(obj, data=request.data, partial=True)
-    #
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data, status=status.HTTP_205_RESET_CONTENT)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, id):
         try:
