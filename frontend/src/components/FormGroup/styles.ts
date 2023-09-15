@@ -7,6 +7,10 @@ export const Container = styled.div`
         display: inline-block;
     }
 
+    .inputSearch {
+        margin-bottom: 0;
+    }
+
     label {
         position: absolute;
         top: 0.6rem;
@@ -37,10 +41,18 @@ export const Container = styled.div`
         }
     }
 
-    .search-icon {
+    .search-icon,
+    .hidePassword-icon {
         position: absolute;
         top: 0.8rem;
         right: 0.8rem;
+    }
+
+    .search-icon {
         color: ${({ theme }) => theme.colors.redSecondary};
+    }
+    
+    .hidePassword-icon {
+        color: ${({ theme }) => theme.colors.gray300};
     }
 `

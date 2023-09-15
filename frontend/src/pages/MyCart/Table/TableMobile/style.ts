@@ -24,19 +24,22 @@ export const Container = styled.div`
     }
 
     > div:last-child {
-      display: flex;
       flex-direction: column;
       justify-content: space-between;
 
       h4 {
         margin-bottom: 0.5rem;
         font-weight: 400;
-        font-size: 1.75rem;
+        font-size: 1.45rem;
+
+        .visibleMobile {
+          display: none;
+        }
       }
 
       > span {
         font-weight: 600;
-        font-size: 1.7rem;
+        font-size: 1.4rem;
       }
 
       div {
@@ -97,12 +100,12 @@ export const Container = styled.div`
       h5 {
         span {
           display: block;
-          font-size: 1.5rem;
+          font-size: 1.3rem;
           font-weight: 400;
         }
 
         font-weight: 700;
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
     }
 
@@ -116,22 +119,26 @@ export const Container = styled.div`
       }
 
       > div:last-child {
-        div {
-          gap: 2rem;
-          justify-content: center;
-          display: block;
+        
+        display: flex;
 
-          .buttonRemove {
-            margin: 0.5rem auto;
-          }
+        div {
+          gap: 1rem;
+          justify-content: center;
         }
 
         h5 {
+          display: flex;
+          text-align: center;
+          align-items: center;
+          gap: 0.5rem;
+          margin: 0 auto;
+          
           span {
-            font-size: 1.5rem;
+            font-size: 1.15rem;
           }
 
-          font-size: 2rem;
+          font-size: 1.4rem;
         }
       }
     }

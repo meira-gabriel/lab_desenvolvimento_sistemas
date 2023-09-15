@@ -1,6 +1,7 @@
-import { Container } from "./styles"
+import { FaSearch } from "react-icons/fa"
+import { Container } from "../styles"
 
-interface FormGroupProps {
+interface InputSearchProps {
     classNameDiv: string
     typeInput: string
     idInput: string
@@ -11,7 +12,7 @@ interface FormGroupProps {
     textLabel: string
 }
 
-export default function FormGroup({
+export default function InputSearch({
     classNameDiv,
     typeInput,
     idInput,
@@ -19,10 +20,14 @@ export default function FormGroup({
     valueInput,
     onChangeInput,
     htmlFor,
-    textLabel }: FormGroupProps) {
+    textLabel }: InputSearchProps) {
     return (
         <Container>
-            <div className={`form-group ${classNameDiv}`}>
+            <div className={`form-group ${classNameDiv} inputSearch`}>
+                <div className="search-icon">
+                    <FaSearch />
+                </div>
+
                 <input
                     type={typeInput}
                     id={idInput}

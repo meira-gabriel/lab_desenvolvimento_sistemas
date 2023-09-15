@@ -21,8 +21,10 @@ export function TableMobile() {
             <img src={`/imgs/${item.imagem}`} alt={item.nome} />
           </div>
           <div>
-            <h4>{item.nome}</h4>
-            <span>{ConvertValue(item.preco)}</span>
+            <h4>
+              <span>{item.nome}:</span> {ConvertValue(item.preco)}
+            </h4>
+
             <div>
               <div>
                 <button type='button' onClick={() => productCartDecrement(item)}>
@@ -38,7 +40,7 @@ export function TableMobile() {
               </button>
             </div>
             <h5>
-              <span>Subtotal</span> {ConvertValue(item.subtotal)}
+              <span>Subtotal:</span> {ConvertValue(item.subtotal)}
             </h5>
           </div>
         </div>

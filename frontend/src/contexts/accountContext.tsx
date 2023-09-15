@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { LoginUser } from '../services/accountService'
+import { LoginUser, getAllUsers } from '../services/accountService'
 import api from '../services/api'
 
 interface AccountContextProps {
@@ -28,10 +28,11 @@ export function AccountProvider({ children }: AccountProviderProps) {
     useEffect(() => {
         const userRecovered = localStorage.getItem('user')
         const token = localStorage.getItem('token')
-        const codigoCliente = Number(localStorage.getItem('codigoCliente'))
+        const userRole = localStorage.getItem('role')
 
-        if (userRecovered && token && codigoCliente) {
+        if (userRecovered && token) {
             setUser(userRecovered)
+            setRole(userRole)
             headers['Authorization'] = `Bearer ${token}`;
             api.defaults.headers = headers;
         }
@@ -41,39 +42,73 @@ export function AccountProvider({ children }: AccountProviderProps) {
         try {
             const response = await LoginUser(userName, senha)
 
-            if (response.data.success === true) {
-                const userLogged = userName
-                const token = response.data.data.token
+            if (response) {
+                const verificaUser = await getAllUsers()
 
-                localStorage.setItem('user', userLogged)
-                localStorage.setItem('token', token)
+                const users = verificaUser.data
+                const userToFind = response.data;
 
-                headers['Authorization'] = `Bearer ${token}`;
-                api.defaults.headers = headers;
+                const foundUser = users.find((user) => user.userName.toLowerCase() === userToFind.userName.toLowerCase());
 
-                setRole(response.data.role)
-                setUser(userLogged)
+                if (foundUser) {
+                    if (foundUser.password.toLowerCase() === userToFind.senha.toLowerCase()) {
+                        const userLogged = userName
+                        const token = foundUser.token
+                        const userRole = foundUser.role
 
-                return 'sucesso'
-            }
-        } catch (error: any) {
-            if (error.response.status === 400) {
-                if (error.response.data.success === false) {
-                    return error.response.data.message
+                        localStorage.setItem('user', userLogged)
+                        localStorage.setItem('token', token)
+                        localStorage.setItem('role', userRole)
+
+                        headers['Authorization'] = `Bearer ${token}`;
+                        api.defaults.headers = headers;
+
+                        setRole(foundUser.role)
+                        setUser(userLogged)
+
+                        return ("sucesso")
+                    } else {
+                        return ("senha incorreta")
+                    }
                 }
-                if (error.response.data.errors) {
-                    return error.response.data.errors.Senha
-                }
+                return ("usuário não encontrado")
             } else {
-                console.log(error)
+                return ("erro no response")
             }
+
+            // if (response.data.success === true) {
+            //     const userLogged = userName
+            //     const token = response.data.data.token
+
+            //     localStorage.setItem('user', userLogged)
+            //     localStorage.setItem('token', token)
+
+            //     headers['Authorization'] = `Bearer ${token}`;
+            //     api.defaults.headers = headers;
+
+            //     setRole(response.data.role)
+            //     setUser(userLogged)
+
+            //     return 'sucesso'
+            // }
+        } catch (error: any) {
+            return ('erro no catch')
+            // if (error.response.status === 400) {
+            //     if (error.response.data.success === false) {
+            //         return error.response.data.message
+            //     }
+            //     if (error.response.data.errors) {
+            //         return error.response.data.errors.Senha
+            //     }
+            // } else {
+            //     console.log(error)
+            // }
         }
     }, [])
 
     const logout = useCallback(() => {
         localStorage.removeItem(user)
         localStorage.removeItem('token')
-        localStorage.removeItem('clienteCode')
 
         headers['Authorization'] = null;
         api.defaults.headers = headers;

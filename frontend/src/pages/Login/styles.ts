@@ -57,9 +57,9 @@ export const Container = styled.div`
 
         .errorLogin {
             margin: 0 0 0.75rem 0;
-            color: ${({theme}) => theme.colors.redSecondary};
-            max-width: 12rem;
-            font-weight: 500;
+            color: ${({theme}) => theme.colors.gray300};
+            font-weight: 600;
+            font-size: 0.75rem;
         }
     }
 `
