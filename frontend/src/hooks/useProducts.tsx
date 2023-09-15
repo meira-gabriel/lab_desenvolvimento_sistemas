@@ -1,6 +1,6 @@
 import { useContext } from 'react'
 
-import { ProductsContext } from '../contexts/productsContext'
+import { ProductsContext } from '../contexts/ProductsContext'
 
 export function useProducts() {
     return useContext(ProductsContext)
