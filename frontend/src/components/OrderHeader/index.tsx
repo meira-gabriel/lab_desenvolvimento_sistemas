@@ -15,7 +15,7 @@ export function OrderHeader() {
       <Link to='/Inicio'>
         <img src={logoImg} alt='Food Commerce' />
       </Link>
-      <div>
+      <div className="carrinho">
         <div>
           <h3>Carrinho</h3>
           <span>

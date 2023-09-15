@@ -7,10 +7,10 @@ import { useCart } from "../../../hooks/useCart"
 
 interface CardProductsProps {
     productInfos: CardsData[]
-    user: boolean
+    tipoUser: string
 }
 
-export default function CardProducts({ productInfos, user }: CardProductsProps) {
+export default function CardProducts({ productInfos, tipoUser }: CardProductsProps) {
     const { cart, addProductIntoCart } = useCart()
     return (
         <Container>
@@ -30,7 +30,7 @@ export default function CardProducts({ productInfos, user }: CardProductsProps) 
 
                         <div>
                             <strong>{ConvertValue(product.preco)}</strong>
-                            {user ?
+                            {tipoUser === "usuario" ?
                                 <button onClick={() => addProductIntoCart(product)}> <IoMdAdd /> </button>
                                 :
                                 <div className="iconsModify">

@@ -10,7 +10,7 @@ export function EmptyCart({ title }: EmptyCartProps) {
   return (
     <Container>
       <h2>{title}</h2>
-      <Button to='/Inicio'>Checar os produtos</Button>
+      <Button to='/Produtos'>Checar os produtos</Button>
       <img src={manAndBurgerImg} alt='Homem com hambúrguer' />
     </Container>
   )

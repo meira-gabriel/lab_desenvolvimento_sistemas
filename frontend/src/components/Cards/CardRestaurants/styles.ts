@@ -56,10 +56,6 @@ export const Filtro = styled.div`
             margin-bottom: 0.5rem;
         }
     }
-
-    .form-group {
-        margin-bottom: 0;
-    }
 `
 
 export const Container = styled.div`

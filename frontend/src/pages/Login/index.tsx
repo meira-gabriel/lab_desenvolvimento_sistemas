@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import FormGroup from "../../components/FormGroup";
 import { useAccount } from "../../hooks/useAccount";
 import { useState, useEffect } from "react";
+import InputPassword from "../../components/FormGroup/InputPassword";
 
 
 export default function Login() {
@@ -15,7 +16,16 @@ export default function Login() {
     const [userName, setUserName] = useState('')
     const [senha, setSenha] = useState('')
     const [errorLogin, setErrorLogin] = useState('')
+    const [typeInput, setTypeInput] = useState("password")
 
+    function hideSenha() {
+        setTypeInput("password")
+    }
+
+    function showSenha() {
+        setTypeInput("text")
+    }
+ 
     function validaDados() {
         if (!userName && !senha) {
             setErrorLogin('Preencha todos os campos')
@@ -35,12 +45,13 @@ export default function Login() {
         e.preventDefault()
         if (!validaDados()) return
 
-        // const response = await loginUsuario(userName, senha)
-        navigate('/Inicio')
-        // if (response === 'sucesso') {
-        // } else {
-        //     setErrorLogin(response)
-        // }
+        const response = await loginUsuario(userName, senha)
+
+        if (response === 'sucesso') {
+            navigate('/Inicio')
+        } else {
+            setErrorLogin(response)
+        }
     }
 
     useEffect(() => {
@@ -65,8 +76,10 @@ export default function Login() {
                     valueInput={userName}
                     onChangeInput={(e) => setUserName(e.target.value)}
                 />
-                <FormGroup
-                    typeInput="password"
+                <InputPassword
+                    typeInput={typeInput}
+                    hideSenha={hideSenha}
+                    showSenha={showSenha}
                     idInput="senha"
                     placeholderInput=""
                     classNameDiv="col-12"

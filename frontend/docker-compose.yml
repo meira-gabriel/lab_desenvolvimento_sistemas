@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+  api:
+    image: node:16
+    working_dir: /app
+    volumes:
+      - ./db.json:/app/db.json
+    ports:
+      - "5000:5000"
+    command: npm run fakeApi

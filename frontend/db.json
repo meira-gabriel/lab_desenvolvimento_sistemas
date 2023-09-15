@@ -156,6 +156,38 @@
       "lng": -46.52713236369506
     },
     {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
+      "lat": -23.461584464958186,
+      "lng": -46.52713236369506
+    },
+    {
       "lat": -23.460008518511287,
       "lng": -46.52829451704157
     },
@@ -218,39 +250,124 @@
   ],
   "Login": [
     {
-      "userName": "Teste",
-      "senha": "Trste",
+      "userName": "usuario",
+      "senha": "usuario123",
       "id": 1
     },
     {
-      "userName": "Login",
-      "senha": "teste",
+      "userName": "user",
+      "senha": "usuario123",
       "id": 2
     },
     {
-      "userName": "Login",
-      "senha": "teste",
+      "userName": "user",
+      "senha": "user123",
       "id": 3
     },
     {
-      "userName": "Login",
-      "senha": "teste",
+      "userName": "user",
+      "senha": "user123",
       "id": 4
     },
     {
-      "userName": "Login",
-      "senha": "teste",
+      "userName": "bkdfjndfas",
+      "senha": "kuhljkn ",
       "id": 5
     },
     {
-      "userName": "Login",
-      "senha": "teste",
+      "userName": "user",
+      "senha": "kuhljkn ",
       "id": 6
     },
     {
-      "userName": "Teste",
-      "senha": "Teste",
+      "userName": "user",
+      "senha": "user123",
       "id": 7
+    },
+    {
+      "userName": "user",
+      "senha": "userkjhnm",
+      "id": 8
+    },
+    {
+      "userName": "user",
+      "senha": "user123",
+      "id": 9
+    },
+    {
+      "userName": "user'",
+      "senha": "user123",
+      "id": 10
+    },
+    {
+      "userName": "user",
+      "senha": "user123",
+      "id": 11
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "userName": "vinivbs",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4g"
+    },
+    {
+      "id": 2,
+      "userName": "bielmeira",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJAiLCJHBJKJHNbbkhgjnliuygkh786u09"
+    },
+    {
+      "id": 3,
+      "userName": "bielpinheiro",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5ykghbiukhjn.i78yuhjnkyguhn8976i-UHKJLjlhnk"
+    },
+    {
+      "id": 4,
+      "userName": "luiza",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5ykghbiukhjnfxgcfvhjkUYGHBIKP798090NVBvblkj"
+    },
+    {
+      "id": 5,
+      "userName": "carol",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5ykghbiuUIHKJMNI7689bhjnkmUUIJMPLOjkppkp"
+    },
+    {
+      "id": 6,
+      "userName": "keyla",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInsedrgfthjknm65787670bjklplpojm9IOLPOPdcs"
+    },
+    {
+      "id": 7,
+      "userName": "davi",
+      "password": "admin123",
+      "role": "admin",
+      "token": "eyJhbGciOiJIUzI1NiIsInsedrgft678098khjhnliuoyihjnmUJHYOIU9003"
+    },
+    {
+      "id": 8,
+      "userName": "user",
+      "password": "user123",
+      "role": "usuario",
+      "token": "eyJhbGciOiJIUzI1NiIsInsedriuyhokijhnUYHOIKLHNuh909967897hjkKGYHUJ"
+    },
+    {
+      "id": 9,
+      "userName": "motoboy",
+      "password": "motoboy123",
+      "role": "entregador",
+      "token": "eyJhbGciOiJIUzI1NiIsInsedriuyh89097hjkKGYHUJhujUHJOKJOHio909b"
     }
   ]
 }

@@ -5,6 +5,8 @@ import { Container, Filtro, Title } from "./styles"
 import { AiFillStar } from 'react-icons/ai'
 import { BsFilterRight, BsArrowDown, BsArrowUp } from 'react-icons/bs'
 import { BiFoodMenu } from 'react-icons/bi'
+import { useNavigate } from 'react-router-dom'
+import InputSearch from '../../FormGroup/InputSearch'
 
 interface CardRestaurantsProps {
   cardInfos: RestaurantsData[]
@@ -16,6 +18,8 @@ export default function CardRestaurants({ cardInfos }: CardRestaurantsProps) {
   const [restaurantesFiltrados, setRestaurantesFiltrados] = useState<RestaurantsData[]>([])
 
   const [ordemDescendente, setOrdemDescendente] = useState(true)
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     setRestaurantesFiltrados(cardInfos)
@@ -83,7 +87,7 @@ export default function CardRestaurants({ cardInfos }: CardRestaurantsProps) {
           ))}
         </select>
 
-        <FormGroup
+        <InputSearch
           classNameDiv='col-12'
           typeInput='text'
           idInput='pesquisar'
@@ -91,7 +95,6 @@ export default function CardRestaurants({ cardInfos }: CardRestaurantsProps) {
           htmlFor='pesquisar'
           textLabel='Pesquisar'
           onChangeInput={(e) => handleChangeBusca(e)}
-          hasSearchIcon={true}
         />
       </Filtro>
 
@@ -109,7 +112,7 @@ export default function CardRestaurants({ cardInfos }: CardRestaurantsProps) {
                   <span> • {card.grupo}</span>
                 </div>
 
-                <button>
+                <button onClick={() => navigate("/produtos")}>
                   <BiFoodMenu />
                   <span>Cardápio</span>
                 </button>
