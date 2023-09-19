@@ -1,14 +1,17 @@
 # LDS5 - App Delivery (Backend)
-Criação Crud básico
 
 ## Preparação de ambiente Windows e Linux
 ### ⚠️ Requisitos 
 
-#### Não precisa instalar o Python, pois ele já está dentro do contêiner Docker.
+#### Não precisa instalar dependências a parte(Python, DRF...), pois ele já está dentro do contêiner Docker.
 
 ### `Docker Desktop`   
 
 🔍 [Link de instalação Windows](https://docs.docker.com/desktop/install/windows-install/)
+- Para usar o docker no Windows é um pré-requisito ter o WSL instalado e habilitado.
+
+- [Link Video de instalação WSL](https://www.youtube.com/watch?v=o1_E4PBl30s)
+
 🔍 [Link de instalação Linux](https://docs.docker.com/engine/install/)
 
 ```bash
@@ -20,7 +23,7 @@ $ docker --version
 
 🔍 [Link de instalação Windows](https://docs.docker.com/desktop/install/windows-install/)
 
-### No Linux:
+### `No Linux:`
 
 Baixar o Docker Compose:
 
@@ -66,7 +69,22 @@ E depois subir o container:
 $ docker-compose up -d
 ```
 
+Após abrir o projeto no VSCode, Pychamr ou outra IDE de sua preferência, 
+é preciso rodar as migrations (dentro do container):
 
+```bash
+$ docker-compose run --rm app sh -c "python manage.py makemigrations"
+```
 
+E depois:
 
+```bash
+$ docker-compose run --rm app sh -c "python manage.py migrate"
+```    
+
+Caso você tenho algum erro de permissão, rode o comando abaixo:
+
+```bash
+$ docker-compose run --rm --user $(id -u):$(id -g) app sh -c "python manage.py migrate"
+```
 
