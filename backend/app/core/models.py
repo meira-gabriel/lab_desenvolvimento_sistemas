@@ -15,6 +15,10 @@ class Usuario(models.Model):
     nome = models.CharField(max_length=100)
     cd_cpf_cnpj = models.CharField(max_length=14) # codigo de cpf ou cnpj
 
+class Estabelecimento(models.Model):
+    dh_funcionamento_ini = models.TimeField() # data e hora de funcionamento inicial
+    dh_funcionamento_fimp = models.TimeField() # data e hora de funcionamento final
+
 class Endereco(models.Model):
     nm_logradouro = models.CharField(max_length=100)
     nr_logradouro = models.IntegerField()
@@ -22,13 +26,8 @@ class Endereco(models.Model):
     nm_cidade = models.CharField(max_length=100)
     cd_uf = models.CharField(max_length=2)
     cd_cep = models.CharField(max_length=10)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE) # chave estrangeira de usuario
-
-class Estabelecimento(models.Model):
-    id_endereco = models.ForeignKey(Endereco, on_delete=models.CASCADE)
-    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
-    dh_funcionamento_ini = models.TimeField() # data e hora de funcionamento inicial
-    dh_funcionamento_fimp = models.TimeField() # data e hora de funcionamento final
+    id_usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, null=True) # chave estrangeira de usuario
+    id_estabelicimento = models.ForeignKey(Estabelecimento, on_delete=models.CASCADE, null=True) # chave estrangeira de estabelecimento
 
 class Produto(models.Model):
     id_estabelecimento = models.ForeignKey(Estabelecimento, on_delete=models.CASCADE)
@@ -74,6 +73,14 @@ class Pedido(models.Model):
             UniqueConstraint(fields=['id_compra'], name='unique_pedido_compra')
         ]
 
+class Localizacao(models.Model):
+    # id_comprador = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+
+    latitude = models.DecimalField(max_digits=12, decimal_places=8)
+    longitude = models.DecimalField(max_digits=12, decimal_places=8)
+ # id_comprador e id_restaurante : many to many
+    def __str__(self):
+        return f'{self.latitude}, {self.longitude}'
 
 
 

@@ -63,6 +63,8 @@ O projeto está rodando em um container Docker, é preciso construir a imagem de
 $ docker-compose build 
 ```
 
+Caso encontre algum erro no Windows, verifique se o terminal do linux (WSL) está aberto, se não esitver 
+abra ele e rode o comando novamente.
 E depois subir o container:
 
 ```bash
