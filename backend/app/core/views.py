@@ -10,6 +10,7 @@ from .serializers import (
     ProdutoSerializer, CartaoSerializer,
     CarrinhoSerializer, CompraSerializer, LocalizacaoSerializer
 )
+import datetime
 
 
 class TipoUsuarioInfo(APIView):
@@ -179,35 +180,36 @@ class EstabelecimentoAPI(APIView):
 
 #
 class LocalizacaoAPI(APIView):
-    def get(self, request, idUsuario, enderecoEntregador):
-
-        enderecoEstabelecimentoQuery = f"select en.* from core_usuario u join core_carrinho ca on u.id = ca.id_usuario_id join core_compra cmp on cmp.id_carrinho_id = ca.id join core_estabelecimento es on es.id = cmp.id_estabelecimento_id join core_endereco en on en.id_estabelecimento_id = es.id where u.id = {idUsuario}"
-        enderecoEstabelecimento = self.runQuery(enderecoEstabelecimentoQuery)
-
+    # def get(self, request, idUsuario, enderecoEntregador):
+    def get(self, request, idUsuario, lat, lng):
+        #
+        # enderecoEstabelecimentoQuery = f"select en.* from core_usuario u join core_carrinho ca on u.id = ca.id_usuario_id join core_compra cmp on cmp.id_carrinho_id = ca.id join core_estabelecimento es on es.id = cmp.id_estabelecimento_id join core_endereco en on en.id_estabelecimento_id = es.id where u.id = {idUsuario}"
+        # enderecoEstabelecimento = self.runQuery(enderecoEstabelecimentoQuery)
+        #
         try:
             endereco_comprador = self.runQuery(f"select en.* from core_usuario u join core_carrinho ca on u.id = ca.id_usuario_id  join core_compra cmp on cmp.id_carrinho_id = ca.id join core_estabelecimento es on es.id = cmp.id_estabelecimento_id  join core_endereco en on en.id_usuario_id  = es.id where u.id = {idUsuario}")
         except Endereco.DoesNotExist:
             msg = {"msg": "Endereço do comprador não encontrado"}
             return Response(msg, status=status.HTTP_404_NOT_FOUND)
-
-        endereco_restaurante = self.runQuery(f"select en.* from core_usuario u join core_carrinho ca on u.id = ca.id_usuario_id  join core_compra cmp on cmp.id_carrinho_id = ca.id join core_estabelecimento es on es.id = cmp.id_estabelecimento_id  join core_endereco en on en.id_estabelecimento_id = es.id where u.id = {idUsuario}")
-
-
-        if endereco_restaurante[0][2] is not None:
-            numero_restaurante = str(endereco_restaurante[0][2])
-        else:
-            numero_restaurante = None
-
-        if endereco_restaurante[0][4] is not None:
-            cep_restaurante = str(endereco_restaurante[0][4])
-        else:
-            cep_restaurante = None
-
-        endereco_restaurante = endereco_restaurante[0][1]
-        # numero_restaurante = str(endereco_restaurante[0][2])
-        #cep_restaurante = endereco_restaurante[0][6]
-
-
+        #
+        # endereco_restaurante = self.runQuery(f"select en.* from core_usuario u join core_carrinho ca on u.id = ca.id_usuario_id  join core_compra cmp on cmp.id_carrinho_id = ca.id join core_estabelecimento es on es.id = cmp.id_estabelecimento_id  join core_endereco en on en.id_estabelecimento_id = es.id where u.id = {idUsuario}")
+        #
+        #
+        # if endereco_restaurante[0][2] is not None:
+        #     numero_restaurante = str(endereco_restaurante[0][2])
+        # else:
+        #     numero_restaurante = None
+        #
+        # if endereco_restaurante[0][4] is not None:
+        #     cep_restaurante = str(endereco_restaurante[0][4])
+        # else:
+        #     cep_restaurante = None
+        #
+        # endereco_restaurante = endereco_restaurante[0][1]
+        # # numero_restaurante = str(endereco_restaurante[0][2])
+        # #cep_restaurante = endereco_restaurante[0][6]
+        #
+        #
         if endereco_comprador[0][2] is not None:
             numero_comprador = str(endereco_comprador[0][2])
         else:
@@ -218,37 +220,68 @@ class LocalizacaoAPI(APIView):
         else:
             cep_comprador = None
 
+        localizacaoEntregador = {
+            "lat": float(lat),
+            "lng": float(lng),
+        }
+        #
         endereco_comprador = endereco_comprador[0][1]
-        # numero_comprador = endereco_comprador[0][2]
-        # cep_comprador = endereco_comprador[0][6]
-
+        # # numero_comprador = endereco_comprador[0][2]
+        # # cep_comprador = endereco_comprador[0][6]
+        #
         gmaps = googlemaps.Client(key="*")
-        response_comprador_restaurante = gmaps.distance_matrix(
-            origins=f"{endereco_restaurante}, {numero_restaurante}, {cep_restaurante}",
-
+        # response_comprador_restaurante = gmaps.distance_matrix(
+        #     origins=f"{endereco_restaurante}, {numero_restaurante}, {cep_restaurante}",
+        #
+        #     destinations=f"{endereco_comprador}, {numero_comprador}, {cep_comprador}"
+        # )
+        #
+        # # Calcular a distância entre o endereço do entregador e o restaurante
+        # response_entregador_restaurante = gmaps.distance_matrix(
+        #     origins=localizacaoEntregador,
+        #     destinations=f"{endereco_restaurante}, {numero_restaurante}, {cep_restaurante}"
+        # )
+        #
+        # # TODO identificar status
+        # status = 2
+        # if status == 1:
+        #     total_time = (response_entregador_restaurante['rows'][0]['elements'][0]['duration']['value']
+        #                   +
+        #                   response_comprador_restaurante['rows'][0]['elements'][0]['duration']['value'])
+        # else:
+        entregador_comprador = gmaps.distance_matrix(
+            origins=localizacaoEntregador,
             destinations=f"{endereco_comprador}, {numero_comprador}, {cep_comprador}"
         )
+        total_time = entregador_comprador['rows'][0]['elements'][0]['duration']['value']
 
-        # Calcular a distância entre o endereço do entregador e o restaurante
-        response_entregador_restaurante = gmaps.distance_matrix(
-            origins=enderecoEntregador,
-            destinations=f"{endereco_restaurante}, {numero_restaurante}, {cep_restaurante}"
-        )
+        return Response({
+            "totalTime": "Tempo estimado de " + self.format_tempo_estimado(total_time),
 
-
+        })
+        # "distancia_entregador_restaurante": response_entregador_restaurante,
+        # "distancia_comprador_restaurante": response_comprador_restaurante
         # Somar as distâncias
-        distancia_total = (
-                response_comprador_restaurante['rows'][0]['elements'][0]['distance']['value'] +
-                response_entregador_restaurante['rows'][0]['elements'][0]['distance']['value']
-        )
+        # distancia_total = (
+        #         response_comprador_restaurante['rows'][0]['elements'][0]['distance']['value'] +
+        #         response_entregador_restaurante['rows'][0]['elements'][0]['distance']['value']
+        # )
 
-        return Response({"distancia_total": distancia_total}, status=status.HTTP_200_OK)
+        # return Response({"distancia_total": distancia_total}, status=status.HTTP_200_OK)
 
         # {
         #     "distancia_total": 20369
         # }
 
+    def format_tempo_estimado(self, sec):
+        td_str = str(datetime.timedelta(seconds=sec))
+        # split string into individual component
+        x = td_str.split(':')
 
+        if x[0] == "0":
+            return f"{x[1]} minutos"
+
+        return f"{x[0]} hora e {x[1]} minutos"
 
     def runQuery(self, query, rows=True):
         with connections['default'].cursor() as cursor:
