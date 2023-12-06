@@ -8,5 +8,7 @@ urlpatterns = [
     path('usuario/<int:id>', UsuarioAPI.as_view()),
     path('endereco/', EnderecoAPI.as_view()),
     path('endereco/<int:id>', EnderecoAPI.as_view()),
-    path('geocode/<int:idUsuario>/<str:enderecoEntregador>', LocalizacaoAPI.as_view()),
+    # path('geocode/<int:idUsuario>/<str:enderecoEntregador>', LocalizacaoAPI.as_view()),
+    path('geocode/<int:idUsuario>/lat/<str:lat>/lng/<str:lng>', LocalizacaoAPI.as_view()),
+
 ]
