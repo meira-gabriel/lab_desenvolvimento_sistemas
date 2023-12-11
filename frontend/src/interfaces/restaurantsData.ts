@@ -1,7 +1,7 @@
 export interface RestaurantsData {
     id: number
     nome: string
-    imagem: string
+    imageUrl: string
     grupo: string
     nota: number
 }

@@ -31,10 +31,6 @@ export const Container = styled.div`
         margin-bottom: 0.5rem;
         font-weight: 400;
         font-size: 1.45rem;
-
-        .visibleMobile {
-          display: none;
-        }
       }
 
       > span {
@@ -91,8 +87,8 @@ export const Container = styled.div`
 
           svg {
             fill: ${({ theme }) => theme.colors.yellow};
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 1.75rem;
+            height: 1.75rem;
           }
         }
       }

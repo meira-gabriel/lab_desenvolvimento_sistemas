@@ -1,4 +1,4 @@
-import { FaTrashAlt } from 'react-icons/fa'
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useCart } from '../../../../hooks/useCart'
 
 import { ConfirmOrder } from '../../../../components/ConfirmOrder'
@@ -29,7 +29,7 @@ export function TableDesktop() {
           {cart.map((item) => (
             <tr key={`${item.nome}-${item.id}`}>
               <td>
-                <img src={`/imgs/${item.imagem}`} alt={item.nome} />
+                <img src={item.imageUrl} alt={item.nome} />
               </td>
               <td>
                 <h4>{item.nome}</h4>
@@ -51,7 +51,7 @@ export function TableDesktop() {
               </td>
               <td>
                 <button type='button' onClick={() => removeProductFromCart(item)}>
-                  <FaTrashAlt />
+                  <DeleteIcon />
                 </button>
               </td>
             </tr>

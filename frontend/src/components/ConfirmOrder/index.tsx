@@ -15,7 +15,7 @@ export function ConfirmOrder() {
 
   return (
     <Container>
-      <button type='button' onClick={() => navigate("/pagamento")}>Finalizar Pedido</button>
+      <button type='button' onClick={() => navigate("/Pagamento")}>Finalizar Pedido</button>
       <span>
         Total : <strong>{ConvertValue(totalAmount)}</strong>
       </span>

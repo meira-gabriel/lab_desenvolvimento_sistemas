@@ -1,9 +1,7 @@
-import FormGroup from '../../../components/FormGroup'
 import Head from '../../../components/Head'
 import { Container } from './styles'
 
 export default function Perfil() {
-
   return (
     <>
       <Head title='Perfil'></Head>
@@ -11,7 +9,7 @@ export default function Perfil() {
         <h4>Perfil</h4>
         <div>
           <form>
-            <FormGroup
+            {/* <FormGroup
               classNameDiv='col-12'
               typeInput='text'
               idInput='email'
@@ -58,10 +56,10 @@ export default function Perfil() {
               placeholderInput=''
               htmlFor='endereco'
               textLabel='endereço'
-            />
+            /> */}
           </form>
 
-          <img src="https://pbs.twimg.com/media/Fopu3e_XgAEpMfG.jpg" alt="sem foto"></img>
+          <img src='https://pbs.twimg.com/media/Fopu3e_XgAEpMfG.jpg' alt='sem foto'></img>
         </div>
       </Container>
     </>

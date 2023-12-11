@@ -7,7 +7,7 @@ export function MyOrder() {
   const { cart } = useCart()
 
   return (
-    <Container to={'cart'}>
+    <Container to={'carrinho'}>
       <span>Carrinho</span>
       <CartIcon />
       {cart.length !== 0 && <span>{cart.length}</span>}

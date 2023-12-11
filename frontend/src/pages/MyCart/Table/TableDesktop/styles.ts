@@ -81,11 +81,6 @@ export const Container = styled.main`
         padding-left: 2rem;
       }
 
-      /* &:nth-child(3),
-      &:nth-child(4) {
-        width: 11.5rem;
-      } */
-
       &:last-child {
         width: 1.5rem;
         padding-right: 0;
@@ -101,8 +96,8 @@ export const Container = styled.main`
 
           svg {
             fill: ${({ theme }) => theme.colors.yellow};
-            width: 1.5rem;
-            height: 1.5rem;
+            width: 1.75rem;
+            height: 1.75rem;
           }
         }
       }

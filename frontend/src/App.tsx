@@ -21,7 +21,7 @@ export default function App() {
           <ProductsProvider>
             <CartProvider>
               <AppRoutes />
-              <ToastContainer autoClose={2000} position="bottom-center" />
+              <ToastContainer autoClose={2000} position='bottom-center' />
               <GlobalStyle />
               <Normalize />
             </CartProvider>

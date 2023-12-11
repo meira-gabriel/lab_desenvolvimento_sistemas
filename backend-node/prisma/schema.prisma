@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Produto {
+  id            Int         @id @default(autoincrement())
+  nome          String
+  descricao     String
+  imageUrl      String
+  idRestaurante Int
+  preco         Decimal     @db.Decimal(10, 2)
+  categoria     String      @default("sem categoria")
+  restaurante   Restaurante @relation(fields: [idRestaurante], references: [id])
+  orderItems    OrderItem[]
+}
+
+model Restaurante {
+  id              Int        @id @default(autoincrement())
+  nome            String
+  imageUrl        String
+  grupo           String
+  nota            Decimal    @db.Decimal(2, 1)
+  lat             String     @default("0.0") @db.VarChar(255)
+  lng             String     @default("0.0") @db.VarChar(255)
+  endereco        String     @default("")
+  numero          String     @default("")
+  produtos        Produto[]
+  administradores Usuario[]
+  orders          Order[]
+  delivery        Delivery[]
+}
+
+model Usuario {
+  id          Int          @id @default(autoincrement())
+  userName    String       @unique
+  email       String       @unique
+  password    String
+  salt        String       @default("")
+  role        String
+  idAdmin     Int?         @map("idAdmin")
+  restaurante Restaurante? @relation(fields: [idAdmin], references: [id])
+}
+
+model Customer {
+  id           Int        @id @default(autoincrement())
+  fullName     String     @db.VarChar(255)
+  email        String     @unique @db.VarChar(255)
+  mobile       String     @db.VarChar(255)
+  document     String     @db.VarChar(255)
+  zipCode      String     @db.VarChar(255)
+  street       String     @db.VarChar(255)
+  number       String     @db.VarChar(255)
+  complement   String?    @db.VarChar(255)
+  neighborhood String     @db.VarChar(255)
+  city         String     @db.VarChar(255)
+  state        String     @db.Char(2)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  orders       Order[]
+  delivery     Delivery[]
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELED
+}
+
+model Order {
+  id            Int         @id @default(autoincrement())
+  status        OrderStatus @default(PENDING)
+  total         Decimal     @db.Decimal(10, 2)
+  transactionId String?     @db.VarChar(255)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  customerId    Int
+  restaurantId  Int         @default(1)
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  restaurant    Restaurante @relation(fields: [restaurantId], references: [id])
+  orderItems    OrderItem[]
+  delivery      Delivery?
+}
+
+model OrderItem {
+  id        Int      @id @default(autoincrement())
+  quantity  Int      @default(0)
+  subTotal  Decimal  @db.Decimal(10, 2)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  order     Order    @relation(fields: [orderId], references: [id])
+  orderId   Int
+  produto   Produto  @relation(fields: [produtoId], references: [id])
+  produtoId Int
+}
+
+enum DeliveryStatus {
+  PENDING
+  PAID
+  PREPARING
+  WAITING_DELIVERY
+  STARTED
+  FINISHED
+}
+
+model Delivery {
+  id             Int            @id @default(autoincrement())
+  status         DeliveryStatus @default(PENDING)
+  lat            String         @db.VarChar(255)
+  lng            String         @db.VarChar(255)
+  latDestination String         @db.VarChar(255)
+  lngDestination String         @db.VarChar(255)
+  orderId        Int            @unique
+  restaurantId   Int            @default(1)
+  customerId     Int            @default(41)
+  order          Order          @relation(fields: [orderId], references: [id])
+  restaurant     Restaurante    @relation(fields: [restaurantId], references: [id])
+  customer       Customer       @relation(fields: [customerId], references: [id])
+}
