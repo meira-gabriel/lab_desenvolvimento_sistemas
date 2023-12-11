@@ -1,133 +1,106 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createContext, ReactNode, useEffect, useState, useMemo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { LoginUser, getAllUsers } from '../services/accountService'
+import { LoginUser } from '../services/accountService'
 import api from '../services/api'
 
 interface AccountContextProps {
-    role: string
-    user: string
-    authenticated: boolean
-    loginUsuario: (userName: string, senha: string) => Promise<string>
-    logout: () => void
+  role: string
+  user: string
+  authenticated: boolean
+  loginUsuario: (userName: string, senha: string) => Promise<any>
+  logout: () => void
+  idAdmin: number
 }
 
 interface AccountProviderProps {
-    children: ReactNode
+  children: ReactNode
 }
 
 export const AccountContext = createContext({} as AccountContextProps)
 
 export function AccountProvider({ children }: AccountProviderProps) {
-    const navigate = useNavigate()
-    const [user, setUser] = useState<any>(null)
-    const [role, setRole] = useState<any>('')
+  const navigate = useNavigate()
+  const [user, setUser] = useState<any>(null)
+  const [role, setRole] = useState<any>('')
+  const [idAdmin, setIdAdmin] = useState<number>(0)
 
-    const [headers] = useState<any>({});
+  const [headers] = useState<any>({})
 
-    useEffect(() => {
-        const userRecovered = localStorage.getItem('user')
-        const token = localStorage.getItem('token')
-        const userRole = localStorage.getItem('role')
+  useEffect(() => {
+    const userRecovered = localStorage.getItem('user')
+    const token = localStorage.getItem('token')
+    const userRole = localStorage.getItem('role')
+    const adminId = localStorage.getItem('idAdmin')
 
-        if (userRecovered && token) {
-            setUser(userRecovered)
-            setRole(userRole)
-            headers['Authorization'] = `Bearer ${token}`;
-            api.defaults.headers = headers;
+    if (userRecovered && token) {
+      setUser(userRecovered)
+      setRole(userRole)
+      setIdAdmin(Number(adminId))
+      headers['Authorization'] = `Bearer ${token}`
+      api.defaults.headers = headers
+    }
+  }, [])
+
+  const loginUsuario = useCallback(async (userName: string, senha: string) => {
+    try {
+      const response = await LoginUser(userName, senha)
+
+      if (response.data.success === true) {
+        const userLogged = userName
+        const token = response.data.token as string
+        const role = response.data.role as string
+        const adminId = response.data.idAdmin || null
+
+        localStorage.setItem('user', userLogged)
+        localStorage.setItem('token', token)
+        localStorage.setItem('role', role)
+        if (adminId) {
+            localStorage.setItem('idAdmin', adminId.toString())
+            setIdAdmin(adminId)
         }
-    }, [])
 
-    const loginUsuario = useCallback(async (userName: string, senha: string) => {
-        try {
-            const response = await LoginUser(userName, senha)
+        headers['Authorization'] = `Bearer ${token}`
+        api.defaults.headers = headers
 
-            if (response) {
-                const verificaUser = await getAllUsers()
+        setRole(role)
+        setUser(userLogged)
 
-                const users = verificaUser.data
-                const userToFind = response.data;
+        return { message: 'sucesso', role: role }
+      }
+    } catch (error: any) {
+      return { message: error.response.data.message, role: '' }
+    }
+  }, [])
 
-                const foundUser = users.find((user) => user.userName.toLowerCase() === userToFind.userName.toLowerCase());
+  const logout = useCallback(() => {
+    localStorage.removeItem('user')
+    localStorage.removeItem('role')
+    localStorage.removeItem('token')
+    localStorage.removeItem('idAdmin')
 
-                if (foundUser) {
-                    if (foundUser.password.toLowerCase() === userToFind.senha.toLowerCase()) {
-                        const userLogged = userName
-                        const token = foundUser.token
-                        const userRole = foundUser.role
+    headers['Authorization'] = null
+    api.defaults.headers = headers
 
-                        localStorage.setItem('user', userLogged)
-                        localStorage.setItem('token', token)
-                        localStorage.setItem('role', userRole)
+    setUser(null)
+    setIdAdmin(0)
+    setRole('')
+    navigate('/')
+  }, [navigate, user, role])
 
-                        headers['Authorization'] = `Bearer ${token}`;
-                        api.defaults.headers = headers;
+  const contextValues = useMemo(
+    () => ({
+      authenticated: !!user,
+      user,
+      loginUsuario,
+      logout,
+      role,
+      setRole,
+      idAdmin
+    }),
+    [loginUsuario, logout, user, role, idAdmin],
+  )
 
-                        setRole(foundUser.role)
-                        setUser(userLogged)
-
-                        return ("sucesso")
-                    } else {
-                        return ("senha incorreta")
-                    }
-                }
-                return ("usuário não encontrado")
-            } else {
-                return ("erro no response")
-            }
-
-            // if (response.data.success === true) {
-            //     const userLogged = userName
-            //     const token = response.data.data.token
-
-            //     localStorage.setItem('user', userLogged)
-            //     localStorage.setItem('token', token)
-
-            //     headers['Authorization'] = `Bearer ${token}`;
-            //     api.defaults.headers = headers;
-
-            //     setRole(response.data.role)
-            //     setUser(userLogged)
-
-            //     return 'sucesso'
-            // }
-        } catch (error: any) {
-            return ('erro no catch')
-            // if (error.response.status === 400) {
-            //     if (error.response.data.success === false) {
-            //         return error.response.data.message
-            //     }
-            //     if (error.response.data.errors) {
-            //         return error.response.data.errors.Senha
-            //     }
-            // } else {
-            //     console.log(error)
-            // }
-        }
-    }, [])
-
-    const logout = useCallback(() => {
-        localStorage.removeItem(user)
-        localStorage.removeItem('token')
-
-        headers['Authorization'] = null;
-        api.defaults.headers = headers;
-
-        setUser(null)
-        navigate('/')
-    }, [navigate, user])
-
-    const contextValues = useMemo(
-        () => ({
-            authenticated: !!user,
-            user,
-            loginUsuario,
-            logout,
-            role,
-            setRole
-        }),
-        [loginUsuario, logout, user, role]
-    )
-
-    return <AccountContext.Provider value={contextValues}>{children}</AccountContext.Provider>
+  return <AccountContext.Provider value={contextValues}>{children}</AccountContext.Provider>
 }

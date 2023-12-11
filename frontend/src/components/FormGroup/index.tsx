@@ -9,6 +9,7 @@ interface FormGroupProps {
     onChangeInput?: React.ChangeEventHandler<HTMLInputElement>
     htmlFor: string
     textLabel: string
+    onClick?: React.MouseEventHandler<HTMLDivElement>
 }
 
 export default function FormGroup({
@@ -19,17 +20,17 @@ export default function FormGroup({
     valueInput,
     onChangeInput,
     htmlFor,
-    textLabel }: FormGroupProps) {
+    textLabel,
+    onClick }: FormGroupProps) {
     return (
-        <Container>
-            <div className={`form-group ${classNameDiv}`}>
+        <Container className={classNameDiv} onClick={onClick}>
+            <div className={`form-group col-12`}>
                 <input
                     type={typeInput}
                     id={idInput}
                     placeholder={placeholderInput}
                     value={valueInput}
                     onChange={onChangeInput}
-                    className="col-12"
                 />
                 <label htmlFor={htmlFor}>{textLabel}</label>
             </div>

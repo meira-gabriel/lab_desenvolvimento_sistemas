@@ -1,20 +1,34 @@
 import { createContext, ReactNode, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { CardsData } from '../interfaces/cardsData'
+import { ProductsData } from '../interfaces/productsData'
+import { CustomerData } from '../interfaces/customerData'
+import { CreditCardData } from '../interfaces/creditCardData'
+import { processCheckout } from '../services/checkoutService'
+import { useNavigate } from 'react-router-dom'
+import { getDeliveryById, setStatusDelivery } from '../services/deliveryService'
 
-interface Product extends CardsData {
+interface Product extends ProductsData {
   quantity: number
   subtotal: number
 }
 
 interface CartContextProps {
-  cart: Product []
-  addProductIntoCart: (product: CardsData) => void
+  cart: Product[]
+  addProductIntoCart: (product: ProductsData) => void
   removeProductFromCart: (product: Product) => void
   productCartIncrement: (product: Product) => void
   productCartDecrement: (product: Product) => void
-  confirmOrder: () => void
+  payOrder: (customer: CustomerData, payment: CreditCardData) => void
+  deliveryId: number
+  setDeliveryId: any
+  duration: string
+  setDuration: any
+  deliveryFull: boolean
+  setDeliveryFull: any
+  startedDelivery: boolean
+  setStartedDelivery: any
+  clearCart: any
 }
 
 interface CartProviderProps {
@@ -23,10 +37,35 @@ interface CartProviderProps {
 
 export const CartContext = createContext({} as CartContextProps)
 
-export function CartProvider({ children }: CartProviderProps) {
-  const [cart, setCart] = useState<Product[]>([])
+const localStorageKey = '@MeServe:cart'
 
-  function addProductIntoCart(product: CardsData): void {
+export function CartProvider({ children }: CartProviderProps) {
+  const navigate = useNavigate()
+
+  const [cart, setCart] = useState<Product[]>(() => {
+    const value = localStorage.getItem(localStorageKey)
+
+    if (value) return JSON.parse(value)
+
+    return []
+  })
+
+  const [deliveryId, setDeliveryId] = useState(0)
+  const [duration, setDuration] = useState('')
+  const [deliveryFull, setDeliveryFull] = useState(false)
+  const [startedDelivery, setStartedDelivery] = useState(false)
+
+  function saveCart(items: Product[]) {
+    setCart(items)
+    localStorage.setItem(localStorageKey, JSON.stringify(items))
+  }
+
+  function clearCart() {
+    setCart([])
+    localStorage.removeItem(localStorageKey)
+  }
+
+  function addProductIntoCart(product: ProductsData): void {
     const productExistentInCart = cart.find(
       (item) => item.nome === product.nome && item.id === product.id,
     )
@@ -43,23 +82,23 @@ export function CartProvider({ children }: CartProviderProps) {
         return item
       })
 
-      toast.success("Produto adicionado ao carrinho")
-      setCart(newCart)
+      toast.success('Produto adicionado ao carrinho')
+      saveCart(newCart)
 
       return
     }
 
-    const newProduct = { ...product, quantity: 1, subtotal: product.preco }
+    const newProduct = { ...product, quantity: 1, subtotal: Number(product.preco) }
     const newCart = [...cart, newProduct] // push de um array
 
-    toast.success("Produto adicionado ao carrinho")
-    setCart(newCart)
+    toast.success('Produto adicionado ao carrinho')
+    saveCart(newCart)
   }
 
   function removeProductFromCart(product: Product) {
     const newCart = cart.filter((item) => !(item.id === product.id && item.nome === product.nome))
 
-    setCart(newCart)
+    saveCart(newCart)
   }
 
   function updateProductQuantity(product: Product, newQuantity: number) {
@@ -76,14 +115,14 @@ export function CartProvider({ children }: CartProviderProps) {
         return {
           ...item,
           quantity: newQuantity,
-          subtotal: item.preco * newQuantity,
+          subtotal: Number(item.preco * newQuantity),
         }
       }
 
       return item
     })
 
-    setCart(newCart)
+    saveCart(newCart)
   }
 
   function productCartIncrement(product: Product) {
@@ -94,7 +133,24 @@ export function CartProvider({ children }: CartProviderProps) {
     updateProductQuantity(product, product.quantity - 1)
   }
 
-  function confirmOrder() {
+  async function payOrder(customer: CustomerData, payment: CreditCardData) {
+    try {
+      const response = await processCheckout(cart, customer, payment)
+
+      if (response.data.status !== 'PAID') {
+        toast.error('Erro ao processar o pagamento, por favor, tente novamente mais tarde.')
+        return
+      }
+
+      const delivery = await getDeliveryById(response.data.deliveryId)
+
+      setDeliveryId(delivery.data.id)
+      toast.success('Pagamento realizado com sucesso!')
+      navigate('/Acompanhar-entrega')
+    } catch (error) {
+      console.error(error)
+      toast.error('Erro ao processar o pedido.')
+    }
     return
   }
 
@@ -106,7 +162,16 @@ export function CartProvider({ children }: CartProviderProps) {
         removeProductFromCart,
         productCartIncrement,
         productCartDecrement,
-        confirmOrder,
+        payOrder,
+        deliveryId,
+        setDeliveryId,
+        duration,
+        setDuration,
+        deliveryFull,
+        setDeliveryFull,
+        startedDelivery,
+        setStartedDelivery,
+        clearCart,
       }}
     >
       {children}

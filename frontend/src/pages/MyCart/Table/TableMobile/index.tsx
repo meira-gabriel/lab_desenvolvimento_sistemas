@@ -1,4 +1,4 @@
-import { FaTrashAlt } from 'react-icons/fa'
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useCart } from '../../../../hooks/useCart'
 
 import { ConfirmOrder } from '../../../../components/ConfirmOrder'
@@ -18,7 +18,7 @@ export function TableMobile() {
       {cart.map((item) => (
         <div key={`${item.nome}-${item.id}`} className='order-item'>
           <div>
-            <img src={`/imgs/${item.imagem}`} alt={item.nome} />
+            <img src={item.imageUrl} alt={item.nome} />
           </div>
           <div>
             <h4>
@@ -36,7 +36,7 @@ export function TableMobile() {
                 </button>
               </div>
               <button type='button' className="buttonRemove" onClick={() => removeProductFromCart(item)}>
-                <FaTrashAlt />
+                <DeleteIcon />
               </button>
             </div>
             <h5>

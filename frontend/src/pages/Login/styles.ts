@@ -35,18 +35,21 @@ export const Container = styled.div`
         }
 
         button {
+            width: 95%;
+            align-self: center;
             background: ${({ theme }) => theme.colors.red};
             border: none;
             border-radius: 5px;
             padding: 0.6rem 4rem;
             color: ${({ theme }) => theme.colors.white};
             font-weight: 500;
-            margin-bottom: 0.5rem;
+            margin: 0.5rem 0;
         }
 
         span {
             font-size: ${({ theme }) => theme.fontSize.sm};
             font-weight: 300;
+            padding-left: 5px;
         }
 
         .textUnderline {
